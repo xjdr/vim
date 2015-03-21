@@ -26,16 +26,14 @@ set viminfo=%,'50,\"100,:100,n~/.viminfo "info to save accross sessions
 set hidden
 
 set background=dark
+:highlight Special ctermfg=202
+:highlight Keyword ctermfg=202
+:highlight Statement ctermfg=189
 :highlight Comment ctermfg=magenta
 :highlight Pmenu ctermbg=black ctermfg=magenta
 
 cmap w!! %!sudo tee > /dev/null %
-
 imap <C-d> <ESC>:r! date<CR>kJ$a
-imap <C-o> <ESC>:bn<CR>
-imap <C-k> <ESC>:bp<CR>
-map <C-o> <ESC>:bn<CR>
-map <C-k> <ESC>:bp<CR>
 
 set softtabstop=2
 set shiftwidth=2
