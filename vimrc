@@ -26,9 +26,10 @@ set viminfo=%,'50,\"100,:100,n~/.viminfo "info to save accross sessions
 set hidden
 
 set background=dark
-:highlight Special ctermfg=202
-:highlight Keyword ctermfg=202
-:highlight Statement ctermfg=189
+:highlight Type ctermfg=118
+:highlight Function ctermfg=202
+:highlight Statement ctermfg=153
+
 :highlight Comment ctermfg=magenta
 :highlight Pmenu ctermbg=black ctermfg=magenta
 
@@ -47,9 +48,10 @@ au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
 au BufNewFile,BufRead *.py set sw=2 sts=2 et
 augroup END
 
-autocmd Filetype java set makeprg=javac\ src/main/java/*/*/*/*.java
+"autocmd Filetype java set makeprg=javac\ -cp\ \".:lib/\*\"\ %
+autocmd Filetype java set makeprg=gradle
 autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-autocmd Filetype java map <LocalLeader>jc :make<Return>:copen<Return>
+autocmd Filetype java map <LocalLeader>jc :make compileJava<Return>:copen<Return>
 autocmd Filetype java map <LocalLeader>nn :cnext<Return>
 autocmd Filetype java map <LocalLeader>np :cprevious<Return>
 autocmd Filetype java map <LocalLeader>cl :ccl<Return>
