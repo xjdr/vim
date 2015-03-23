@@ -18,7 +18,7 @@ set ruler                                                    " show where you ar
 set scrolloff=3                                              " show context above/below cursorline
 set showcmd
 set smartcase                                                " case-sensitive search if any caps
-set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
+set wildignore=*.pyc,*.class
 set wildmenu                                                 " show a navigable menu for tab completion
 set wildmode=longest,list,full
 set hls
@@ -42,29 +42,12 @@ set expandtab
 
 " change filetypes for common files
 augroup filetypedetect
-au BufNewFile,BufRead *.md set filetype=markdown softtabstop=4 shiftwidth=4
-au BufNewFile,BufRead *.scala set filetype=scala
-au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
-au BufNewFile,BufRead *.py set sw=2 sts=2 et
-augroup END
-
-set makeprg=gradle
-set errorformat=
-  \%-G:%.%\\+,
-  \%E%f:\ %\\d%\\+:\ %m\ @\ line\ %l\\,\ column\ %c.,%-C%.%#,%Z%p^,
-  \%E%>%f:\ %\\d%\\+:\ %m,%C\ @\ line\ %l\\,\ column\ %c.,%-C%.%#,%Z%p^,
-  \%-G\\s%#,
-  \%-GBUILD\ SUCCESSFUL#,
-  \%-GTotal\ \time:\ %.%#
-
-map <LocalLeader>jc :w<CR> :compiler javac<CR> :make -cp .:lib/* %<CR>:copen<CR>
-map <LocalLeader>gt :make test<Return>:copen<Return>
-map <LocalLeader>nn :cnext<Return>
-map <LocalLeader>np :cprevious<Return>
-map <LocalLeader>cl :ccl<Return>
-
 au BufNewFile,BufRead *.groovy  setf groovy
 au BufNewFile,BufRead *.gradle  setf groovy
+au BufNewFile,BufRead *.scala set filetype=scala
+au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
+au BufNewFile,BufRead *.md set filetype=markdown softtabstop=4 shiftwidth=4
+augroup END
 
 hi User1 ctermfg=green ctermbg=black
 hi User2 ctermfg=yellow ctermbg=black
