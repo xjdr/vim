@@ -18,7 +18,7 @@ set ruler                                                    " show where you ar
 set scrolloff=3                                              " show context above/below cursorline
 set showcmd
 set smartcase                                                " case-sensitive search if any caps
-set wildignore=*.pyc,*.class
+set wildignore=*.pyc,*.class,*.o,*.a
 set wildmenu                                                 " show a navigable menu for tab completion
 set wildmode=longest,list,full
 set hls
@@ -26,6 +26,7 @@ set viminfo=%,'50,\"100,:100,n~/.viminfo "info to save accross sessions
 set hidden
 
 set background=dark
+
 :highlight Type ctermfg=118
 :highlight Function ctermfg=202
 :highlight Statement ctermfg=153
@@ -33,20 +34,35 @@ set background=dark
 :highlight Comment ctermfg=magenta
 :highlight Pmenu ctermbg=black ctermfg=magenta
 
-cmap w!! %!sudo tee > /dev/null %
+cmap w! %!sudo tee > /dev/null %
 imap <C-d> <ESC>:r! date<CR>kJ$a
 
 set softtabstop=2
 set shiftwidth=2
 set expandtab
 
+noremap 1 :tabnext 1<CR>
+noremap 2 :tabnext 2<CR>
+noremap 3 :tabnext 3<CR>
+noremap 4 :tabnext 4<CR>
+noremap 5 :tabnext 5<CR>
+noremap 6 :tabnext 6<CR>
+noremap 7 :tabnext 7<CR>
+noremap 8 :tabnext 8<CR>
+noremap 9 :tablast<CR>
+
 " change filetypes for common files
-augroup filetypedetect
-au BufNewFile,BufRead *.groovy  setf groovy
-au BufNewFile,BufRead *.gradle  setf groovy
-au BufNewFile,BufRead *.scala set filetype=scala
-au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
-au BufNewFile,BufRead *.md set filetype=markdown softtabstop=4 shiftwidth=4
+augroup xjeffrose
+  au BufNewFile,BufRead *.groovy  setf groovy
+  au BufNewFile,BufRead *.gradle  setf groovy
+  au BufNewFile,BufRead *.scala set filetype=scala
+  au BufNewFile,BufRead *.python set filetype=python sw=2 sts=2 et
+  au BufNewFile,BufRead *.json setfiletype javascript
+  au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
+  au BufNewFile,BufRead *.md set filetype=markdown softtabstop=4 shiftwidth=4
+
+  autocmd Filetype markdown setlocal spell textwidth=80
+  autocmd Filetype gitcommit,mail setlocal spell textwidth=76 colorcolumn=77
 augroup END
 
 hi User1 ctermfg=green ctermbg=black
@@ -65,7 +81,17 @@ set statusline +=%1*%=%5l%* "current line
 set statusline +=%2*/%L%* "total lines
 set statusline +=%1*%4v\ %* "virtual column number
 
-function! <SID>StripTrailingWhitespaces()
+function! ExecuteInShell(cmd)
+  let t:last_shell_cmd = a:cmd
+  if (system("tmux list-panes | wc -l | grep -Eo '(\\d+)'") > 1)
+    execute(":silent !tmux send-keys -t 1 ".a:cmd." Enter" )
+  else
+    execute(":!".a:cmd)
+  endif
+  redraw!
+endfunction
+
+function! StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line(".")
@@ -77,31 +103,8 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 
-function! Smart_TabComplete()
-  let line = getline('.')                         " current line
-  let substr = strpart(line, -1, col('.')+1)      " from the start of the current
-                                                  " line to one character right
-                                                  " of the cursor
-  let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
-  if (strlen(substr)==0)                          " nothing to match on empty string
-    return "\<tab>"
-  endif
-  let has_period = match(substr, '\.') != -1      " position of period, if any
-  let has_slash = match(substr, '\/') != -1       " position of slash, if any
-  if (!has_period && !has_slash)
-    return "\<C-X>\<C-P>"                         " existing text matching
-  elseif ( has_slash )
-    return "\<C-X>\<C-F>"                         " file matching
-  else
-    return "\<C-X>\<C-O>"                         " plugin matching
-  endif
-endfunction
-
 " keyboard shortcuts
-let mapleader = ','
-noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
-nnoremap <LocalLeader><space> :call <SID>StripTrailingWhitespaces()<CR>
-inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+nnoremap <leader><space> :call StripTrailingWhitespaces()<CR>
 
 " Use sane regexes.
 nnoremap / /\v
