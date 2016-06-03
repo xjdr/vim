@@ -47,7 +47,8 @@ au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
 au BufNewFile,BufRead *.py set sw=2 sts=2 et
 augroup END
 
-autocmd Filetype java set makeprg=javac\ src/main/java/*/*/*/*.java
+"autocmd Filetype java set makeprg=javac\ src/main/java/*/*/*/*.java
+autocmd Filetype java set makeprg=make\ -k 
 autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
 autocmd Filetype java map <LocalLeader>jc :make<Return>:copen<Return>
 autocmd Filetype java map <LocalLeader>nn :cnext<Return>
