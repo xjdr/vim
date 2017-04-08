@@ -1,4 +1,4 @@
-" Lets try to get better at vim
+" Simple Vim
 syntax on
 filetype plugin indent on
 
@@ -38,12 +38,8 @@ set statusline +=%1*%4v\ %* "virtual column number
 
 " change filetypes for common files
 augroup xjeffrose
-  au BufNewFile,BufRead *.groovy  setf groovy
-  au BufNewFile,BufRead *.gradle  setf groovy
-  au BufNewFile,BufRead *.scala set filetype=scala
   au BufNewFile,BufRead *.python set filetype=python sw=2 sts=2 et
   au BufNewFile,BufRead *.json setfiletype javascript
-  au BufNewFile,BufRead BUILD set filetype=python sw=2 sts=2 et
   au BufNewFile,BufRead *.md set filetype=markdown softtabstop=4 shiftwidth=4
 
   autocmd Filetype markdown setlocal spell textwidth=80
